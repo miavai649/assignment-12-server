@@ -99,7 +99,7 @@ async function run() {
             res.send(result)
         })
 
-        // admin api protected
+        // admin route protected
         app.get('/users/admin/:email', async (req, res) => {
             const email = req.params.email
             const query = { email: email }
@@ -107,12 +107,20 @@ async function run() {
             res.send({isAdmin: user?.role === 'Admin'})
         })
 
-        // admin api protected
+        // seller route protected
         app.get('/users/seller/:email', async (req, res) => {
             const email = req.params.email
             const query = { email: email }
             const user = await usersCollection.findOne(query)
             res.send({isSeller: user?.role === 'Seller'})
+        })
+
+        // buyer route protected
+        app.get('/users/buyer/:email', async (req, res) => {
+            const email = req.params.email
+            const query = { email: email }
+            const user = await usersCollection.findOne(query)
+            res.send({isBuyer: user?.role === 'Buyer'})
         })
 
     }
