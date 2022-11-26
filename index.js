@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const cors = require('cors')
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const port = process.env.PORT || 5000;
@@ -16,14 +17,22 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
-        const catagoriesCollection = client.db('fantasticFurniture').collection('catagories') 
-        
+        const catagoriesCollection = client.db('fantasticFurniture').collection('catagories')
+        const usersCollection = client.db('fantasticFurniture').collection('users')
+
+        // all categories api
         app.get('/catagories', async (req, res) => {
             const query = {}
             const result = await catagoriesCollection.find(query).toArray()
             res.send(result)
         })
 
+        // saving user api
+        app.post('/users', async (req, res) => {
+            const user = req.body
+            const result = await usersCollection.insertOne(user)
+            res.send(result)
+        })
     }
     finally {
         
