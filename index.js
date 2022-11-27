@@ -38,6 +38,7 @@ async function run() {
     try {
         const catagoriesCollection = client.db('fantasticFurniture').collection('catagories')
         const usersCollection = client.db('fantasticFurniture').collection('users')
+        const productsCollection = client.db('fantasticFurniture').collection('products')
 
         // verify admin
         const verifyAdmin = async (req, res, next) => {
@@ -143,6 +144,21 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const result = await usersCollection.deleteOne(query);
             res.send(result);
+        })
+
+        // add a product
+        app.post('/addProduct', async (req, res) => {
+            const newProduct = req.body;
+            const result = await productsCollection.insertOne(newProduct)
+            res.send(result)
+        })
+
+        // get products
+        app.get('/:categoryName', async (req, res) => {
+            const category = req.params.categoryName
+            const query = {category: category}
+            const products = await productsCollection.find(query).toArray()
+            res.send(products)
         })
 
     }
