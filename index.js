@@ -123,6 +123,12 @@ async function run() {
             res.send({isBuyer: user?.role === 'Buyer'})
         })
 
+        app.get('/users/buyers', async (req, res) => {
+            const query = {role: 'Buyer'}
+            const user = await usersCollection.find(query).toArray()
+            res.send(user)
+        })
+
     }
     finally {
         
