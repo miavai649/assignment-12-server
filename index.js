@@ -194,7 +194,7 @@ async function run() {
             res.send(myProducts)
         })
 
-        app.delete('/myProduct/:id', async (req, res) => {
+        app.delete('/myProduct/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = {_id: ObjectId(id)}
             const result = await productsCollection.deleteOne(query)
