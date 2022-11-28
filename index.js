@@ -187,6 +187,15 @@ async function run() {
             res.send(myOrders)
         })
 
+        app.get('/myProducts/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email;
+            const query = {email: email}
+            const myProducts = await productsCollection.find(query).toArray()
+            res.send(myProducts)
+        })
+
+        
+
     }
     finally {
         
