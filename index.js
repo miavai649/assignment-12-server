@@ -39,6 +39,7 @@ async function run() {
         const catagoriesCollection = client.db('fantasticFurniture').collection('catagories')
         const usersCollection = client.db('fantasticFurniture').collection('users')
         const productsCollection = client.db('fantasticFurniture').collection('products')
+        const bookingsCollection = client.db('fantasticFurniture').collection('bookings')
 
         // verify admin
         const verifyAdmin = async (req, res, next) => {
@@ -159,6 +160,24 @@ async function run() {
             const query = {category: category}
             const products = await productsCollection.find(query).toArray()
             res.send(products)
+        })
+
+        app.post('/bookings', async (req, res) => {
+            const booking = req.body;
+            const query = {
+                productName: booking.productName,
+                email: booking.email
+            }
+
+            const alreadyBooked = await bookingsCollection.find(query).toArray()
+
+            if (alreadyBooked.length) {
+                const message = 'You have already booked this product'
+                return res.send({acknowledged: false, message})
+            }
+
+            const result = await bookingsCollection.insertOne(booking)
+            res.send(result)
         })
 
     }
