@@ -180,6 +180,13 @@ async function run() {
             res.send(result)
         })
 
+        app.get('/myorders/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email;
+            const query = {email: email}
+            const myOrders = await bookingsCollection.find(query).toArray()
+            res.send(myOrders)
+        })
+
     }
     finally {
         
